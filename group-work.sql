@@ -3,9 +3,9 @@ CREATE TABLE Customers (
     customer_id SERIAL PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
-    dob DATE NOT NULL, -- Date of Birth
+    dob DATE NOT NULL, 
     email VARCHAR(100) UNIQUE NOT NULL,
-    phone VARCHAR(15) NOT NULL,
+    phone VARCHAR(15) NOT NULL
 );
 
 -- One-to-One Relationship: Create CustomerDetails Table
@@ -36,7 +36,6 @@ CREATE TABLE Transactions (
     FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
 );
 
-
 -- Many-to-Many Relationship: Create Loans and CustomerLoans Tables
 CREATE TABLE Loans (
     loan_id SERIAL PRIMARY KEY,
@@ -55,9 +54,43 @@ CREATE TABLE CustomerLoans (
 
 -- Indexing Tables
 CREATE INDEX idx_customer_last_name ON Customers(last_name);
-CREATE INDEX idx_employee_last_name ON Employees(last_name);
 CREATE INDEX idx_transaction_date ON Transactions(transaction_date);
 
+-- Insert Values into Customers Table
+INSERT INTO Customers (first_name, last_name, dob, email, phone) VALUES
+('Irakli', 'Tsurtsumia', '2002-01-15', 'iraklitsurtsumia@gmail.com', '551050790'),
+('Giorgi', 'Olqiashvili', '2004-02-20', 'giorgiolqiashvili@gmail.com', '557050730'),
+('Nika', 'Gabeskeria', '2004-03-25', 'nikagabeskiria@gmail.com', '598645278');
+
+-- Insert Values into CustomerDetails Table
+INSERT INTO CustomerDetails (customer_id, address, nationality) VALUES
+(1, 'Marjanishvili ST', 'American'),
+(2, 'Rustaveli ST', 'Italian'),
+(3, 'Saburtalo ST', 'Georgian');
+
+-- Insert Values into Accounts Table
+INSERT INTO Accounts (account_number, customer_id, balance, account_type) VALUES
+('AC123456789', 1, 1000.50, 'Savings'),
+('AC987654321', 2, 2500.75, 'Checking'),
+('AC456789123', 3, 1500.25, 'Savings');
+
+-- Insert Values into Transactions Table
+INSERT INTO Transactions (account_id, transaction_date, amount, transaction_type) VALUES
+(1, '2023-01-10 14:30:00', 200.00, 'Deposit'),
+(2, '2023-02-15 09:45:00', 500.00, 'Withdrawal'),
+(3, '2023-03-20 11:00:00', 300.00, 'Deposit');
+
+-- Insert Values into Loans Table
+INSERT INTO Loans (loan_type, amount, interest_rate) VALUES
+('Home Loan', 200000.00, 3.5),
+('Car Loan', 30000.00, 4.0),
+('Personal Loan', 10000.00, 5.0);
+
+-- Insert Values into CustomerLoans Table
+INSERT INTO CustomerLoans (customer_id, loan_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3);
 
 -- Joins and Queries
 
@@ -132,3 +165,29 @@ WHERE amount > 1000;
 -- 13. Find the average balance of all accounts
 SELECT AVG(balance) AS average_balance
 FROM Accounts;
+
+
+
+
+
+
+
+
+
+-- left Join -- 
+-- SELECT c.first_name, c.last_name, a.account_number, a.balance
+-- FROM Customers AS c
+-- LEFT JOIN Accounts AS a ON c.customer_id = a.customer_id;
+
+
+-- Right Join --
+-- SELECT c.first_name, c.last_name, a.account_number, a.balance
+-- FROM Customers AS c
+-- RIGHT JOIN Accounts AS a ON c.customer_id = a.customer_id;
+
+
+-- Full Outer Join --
+-- SELECT c.first_name, c.last_name, a.account_number, a.balance
+-- FROM Customers AS c
+-- FULL OUTER JOIN Accounts AS a ON c.customer_id = a.customer_id;
+
